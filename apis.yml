@@ -1,0 +1,73 @@
+name: OnTopX402
+description: >-
+  A single money-ranked public link leaderboard where rank is decided by the amount paid in USDC via the x402 protocol.
+  Submit a link, description, and amount to appear at the position that amount buys; bids stack. No accounts or API keys
+  — reads are free, paid writes settle via x402 micropayments on Base and Solana.
+url: https://raw.githubusercontent.com/api-evangelist/ontopx402/refs/heads/main/apis.yml
+created: '2026-08-24'
+modified: '2026-08-24'
+specificationVersion: '0.21'
+tags:
+  - x402
+  - usdc
+  - base
+  - solana
+  - ai
+  - directory
+  - leaderboard
+  - ranking
+  - paid-placement
+  - sponsored
+  - advertising
+  - bidding
+  - auction
+  - pay-per-rank
+  - link-listing
+  - backlink
+  - seo
+  - agent-payments
+  - agent-discovery
+  - micropayments
+apis:
+  - name: OnTopX402 API
+    description: >-
+      REST API for reading the money-ranked link leaderboard, looking up individual links, and submitting paid bids to
+      get listed or climb the board. Paid writes are gated by x402 USDC micropayments; reads are free but rate-limited.
+    humanURL: https://ontopx402.com/llms.txt
+    baseURL: https://ontopx402.com
+    tags:
+      - x402
+      - usdc
+      - base
+      - solana
+      - ai
+      - directory
+      - leaderboard
+      - ranking
+      - paid-placement
+      - sponsored
+      - advertising
+      - bidding
+      - auction
+      - pay-per-rank
+      - link-listing
+      - backlink
+      - seo
+      - agent-payments
+      - agent-discovery
+      - micropayments
+    properties:
+      - type: OpenAPI
+        url: https://ontopx402.com/openapi.json
+      - type: LLMsTxt
+        url: https://ontopx402.com/llms.txt
+      - type: Documentation
+        url: https://ontopx402.com/rules
+maintainers:
+  - FN: One Scales Inc.
+    url: https://ontopx402.com/
+generated:
+  by: apis.io/add
+  model: claude-opus-4-8
+  confidence: 97
+  at: '2026-08-24T09:05:28.101Z'
