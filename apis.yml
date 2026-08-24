@@ -1,0 +1,87 @@
+aid: ontopx402
+name: OnTopX402
+description: >-
+  OnTopX402 is a single public leaderboard of links in which rank is decided solely by the amount
+  paid, settled in USDC over x402. There is no account, no API key and no card: an agent reads the
+  board, decides what a position is worth, pays, and is listed in one request with no human
+  involved. Three operations — read the leaderboard, read an entry, and bid. The bid endpoint
+  returns an HTTP 402 payment challenge at x402 version 2, priced at a $1 minimum and payable in
+  USDC on Base or Solana. Operated by One Scales Inc.
+type: Index
+url: https://raw.githubusercontent.com/api-evangelist/ontopx402/refs/heads/main/apis.yml
+created: '2026-08-24'
+modified: '2026-08-24'
+specificationVersion: '0.23'
+tags:
+- x402
+- Agent Commerce
+- Machine Payments
+- Advertising
+- Paid Placement
+- Leaderboard
+- USDC
+tags_raw:
+- x402
+- usdc
+- agent-payments
+- paid-placement
+- leaderboard
+apis:
+- aid: ontopx402:ontopx402-api
+  name: OnTopX402 API
+  description: >-
+    Read the leaderboard, read a single entry, and bid for rank. GET /api/leaderboard returns the
+    board unauthenticated; POST /api/bid returns an x402 payment challenge rather than requiring
+    an account.
+  humanURL: https://ontopx402.com/
+  baseURL: https://ontopx402.com
+  tags:
+  - x402
+  - Agent Commerce
+  - Advertising
+  properties:
+  - type: OpenAPI
+    url: openapi/ontopx402-api-openapi.yml
+  - type: APIReference
+    url: https://ontopx402.com/openapi.json
+  - type: Documentation
+    url: https://ontopx402.com/
+  - type: FinOps
+    url: finops/ontopx402-x402-challenge.json
+  - type: Examples
+    url: examples/ontopx402-leaderboard-example.json
+common:
+- type: LLMsTxt
+  url: llms/ontopx402-llms.txt
+- type: Website
+  url: https://ontopx402.com/
+- type: FinOps
+  url: finops/ontopx402-x402-challenge.json
+maintainers:
+- FN: One Scales Inc.
+  email: info@ontopx402.com
+  url: https://ontopx402.com/
+x-provenance:
+  added: '2026-08-24'
+  method: searched
+  source: https://ontopx402.com/llms.txt
+  note: >-
+    Submitted via apis.io/add on 2026-08-24 and auto-published by the gate at rating 48. The
+    submitted APIs.json URL returns 404 against a control that also 404s, so it is a bad pointer
+    in the submission rather than an absent surface. Everything here was found from the provider's
+    own llms.txt and OpenAPI.
+    The x402 surface is real and was exercised. POST /api/bid with no payment header returns HTTP
+    402 carrying x402Version 2, a `payment-required` header, and two `accepts` entries: USDC on
+    Base (eip155:8453) and on Solana, both at amount 1000000 (a $1 minimum), 300-second timeout.
+    The challenge also carries a `bazaar` extension with full JSON Schema for the request body and
+    an example response — an unusually complete machine-readable purchase contract. The saved
+    file under finops/ is that response verbatim. GET /api/leaderboard returns the live board
+    unauthenticated and is saved under examples/.
+    WHAT THIS SERVICE IS, STATED PLAINLY, BECAUSE IT BEARS ON WHETHER WE SHOULD CARRY IT. This is
+    paid placement. The provider says so itself: "Rank is decided by the amount paid, and nothing
+    else… There is no editorial judgement, no quality score, no review… This is paid placement,
+    and it says so plainly. Listing links are followed." Its own tags include backlink, seo,
+    sponsored and paid-placement. It is honest, working, and technically excellent — and it is
+    also a followed-backlink product, which is the category API Evangelist refuses when it arrives
+    by email. Listed here on the standing rule that a valid company with a real API gets listed
+    and the rating speaks; flagged for a policy decision rather than decided unilaterally.

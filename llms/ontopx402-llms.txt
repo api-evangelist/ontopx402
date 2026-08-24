@@ -1,0 +1,163 @@
+# OnTopX402 — ontopx402.com
+
+> One public leaderboard. Rank is decided by the amount paid, and nothing else.
+> Paid in USDC over x402. No account, no API key, no card. An agent can read the
+> board, decide what a position is worth, pay, and be listed — in one request,
+> with no human involved.
+
+Status: payments are LIVE
+Operated by One Scales Inc. Contact: info@ontopx402.com
+
+## What this is
+
+A single global ranking of links. Every position was bought. The number beside a
+listing is the total paid on it, and that total is the only thing that decides
+where it sits. There is no editorial judgement, no quality score, no review, and
+no application. If you pay more than the listing above you, you are above it.
+
+This is paid placement, and it says so plainly. Listing links are followed.
+
+## The rules, in full
+
+- Minimum bid $1. No maximum.
+- Your amount decides your position. Bidding less than #1 still lists you,
+  wherever that amount reaches.
+- Bidding again on a link already listed ADDS to its total. Bids stack; they
+  never replace. Nobody starts over.
+- Equal totals are ordered by who arrived first — the older listing ranks higher.
+- Being outbid refunds nothing. The money bought the position for as long as it
+  held it.
+- There are no accounts, so a link is its own identity. Anyone may add to any
+  listing, and the most recent bid writes the description.
+- Rank is not stored. It is computed from the totals on every read.
+- Refused before any payment is taken: adult platforms, and anything illegal.
+  Removals after the fact are not refunded.
+
+## Read the board (free, no payment, no key)
+
+  GET https://ontopx402.com/api/leaderboard?limit=50&offset=0
+      -> { count, total_paid_usd, top_amount_usd, to_take_first_usd, entries[] }
+      Each entry: rank, url, name, description, amount_usd, amount_atomic,
+      bids, favicon, first_bid_at, updated_at, page
+
+  GET https://ontopx402.com/api/entry?url=example.com
+      -> the same shape for one link, plus to_pass_the_one_above_usd
+      -> 404 with { listed: false } if it is not on the board
+
+Current board:
+  listings   6
+  total paid $13
+  at #1      $5
+  to take #1 $6
+
+  #1          $5  orislist.com — The database of verified SEO agencies.
+  #2          $2  underscoredone.com — Pay-per-call USDC APIs for AI agents — 26 tools, $0.01/call, no accoun
+  #3          $2  readmbox.com — Open and read MBOX files right in your browser.
+  #4          $2  webmcpdirectory.com — WebMCP Directory lists websites that expose their own tools to AI agen
+  #5          $1  llmsdirectory.com — The llms.txt directory: discover websites implementing llms.txt, score
+
+## Get listed (paid)
+
+  POST https://ontopx402.com/api/bid
+
+Send three things, as a JSON body or as query parameters:
+
+  url          the link to rank (links only, no social handles)
+  description  what it is, at most 255 characters
+  amount       how much to bid, in US dollars, minimum $1
+
+The query form exists because most agent payment tools accept a URL and nothing
+else. Both are equivalent:
+
+  https://ontopx402.com/api/bid?url=https%3A%2F%2Fexample.com&description=What%20this%20is%2C%20in%20one%20line.&amount=6.00
+
+  curl -X POST https://ontopx402.com/api/bid \
+    -H 'Content-Type: application/json' \
+    -d '{"url":"https://example.com","description":"What this is, in one line.","amount":"6.00"}'
+
+## How paying works
+
+The amount you bid IS the price of the call. There is no fixed price to look up.
+
+  1. POST the bid with no payment header.
+     -> 402, carrying x402 v2 payment requirements priced at exactly your amount,
+        in the body AND base64-encoded in the PAYMENT-REQUIRED header.
+  2. Pay one of the `accepts` entries.
+  3. POST the same bid again with the X-PAYMENT header.
+     -> 200. The row is written, and X-PAYMENT-RESPONSE carries the settlement
+        receipt including the transaction hash.
+
+What comes back on 200:
+
+  {
+    "ok": true,
+    "paid_usd": "25.00",
+    "transaction": "0x9f2c...6789",
+    "network": "eip155:8453",
+    "rank": 1,
+    "url": "https://example.com",
+    "name": "example.com",
+    "description": "What this is, in one line.",
+    "amount_usd": "25.00",
+    "amount_atomic": 25000000,
+    "bids": 1,
+    "page": "https://ontopx402.com/e/example-com"
+  }
+
+`rank` is your position the moment the payment settled. `amount_usd` is the
+lifetime total on the link, which is larger than `paid_usd` when bids stack.
+Send the same payment twice and you get { "already_credited": true } with the
+entry unchanged — a settled transaction is never counted a second time.
+
+Nothing is charged and no row appears until the payment settles. If settlement
+fails, no listing is created and no money moves.
+
+Accepted:
+  Base    eip155:8453
+          USDC 0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913
+          pay to 0xE9740820225B3918b4ddd1292C7cA4Ca0e2C2F08
+  Solana  solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp
+          USDC EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v
+          pay to 8ugAWAXDB8V18kiUrGZTq1oMvU3C6Fxs8hfC6rvzQT3b
+  scheme  exact   facilitator https://api.cdp.coinbase.com/platform/v2/x402
+
+Ways to pay. The tools below start from the board and discover this endpoint
+themselves; the curl above is the one that carries a specific bid.
+
+  AgentCash
+    npx agentcash try https://ontopx402.com
+
+  AWAL (Coinbase agentic wallet)
+    npx awal x402 bazaar search ontopx402.com
+
+  Pay.sh
+    pay curl https://ontopx402.com
+
+  Poncho — open in a browser
+    https://tryponcho.com/m/ontopx402.com
+
+  Anything else
+    Handle the 402 yourself with any x402 client, or read
+    https://ontopx402.com/openapi.json for the full contract.
+
+Humans without an agent wallet can bid at https://ontopx402.com/submit and sign a USDC
+transfer in a browser wallet.
+
+## Errors
+
+  400  the url, description or amount is unusable — nothing was charged
+  402  payment required, or the payment did not verify or settle
+  404  no such listing
+  429  too many free reads from one address
+
+A 402 whose body says payments are unavailable means the facilitator is
+unreachable. Nothing was charged. Retry later.
+
+## Machine-readable
+
+  https://ontopx402.com/openapi.json   full schema, with x-402 payment metadata
+  https://ontopx402.com/api/leaderboard
+  https://ontopx402.com/sitemap.xml
+
+Every listing also has its own page at https://ontopx402.com/e/<slug> showing the full
+bid history, including which network each payment settled on.
