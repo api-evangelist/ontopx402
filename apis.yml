@@ -27,21 +27,34 @@ tags_raw:
 - paid-placement
 - leaderboard
 apis:
-- aid: ontopx402:ontopx402-api
-  name: OnTopX402 API
-  description: >-
-    Read the leaderboard, read a single entry, and bid for rank. GET /api/leaderboard returns the
-    board unauthenticated; POST /api/bid returns an x402 payment challenge rather than requiring
-    an account.
+- aid: ontopx402:ontopx402-bidding-api
+  name: OnTopX402 Bidding API
+  description: The bidding API from OnTopX402 — 1 operation(s) for bidding.
   humanURL: https://ontopx402.com/
   baseURL: https://ontopx402.com
   tags:
-  - x402
-  - Agent Commerce
-  - Advertising
+  - bidding
   properties:
   - type: OpenAPI
-    url: openapi/ontopx402-api-openapi.yml
+    url: openapi/ontopx402-bidding-api-openapi.yml
+  - type: APIReference
+    url: https://ontopx402.com/openapi.json
+  - type: Documentation
+    url: https://ontopx402.com/
+  - type: FinOps
+    url: finops/ontopx402-x402-challenge.json
+  - type: Examples
+    url: examples/ontopx402-leaderboard-example.json
+- aid: ontopx402:ontopx402-leaderboard-api
+  name: OnTopX402 Leaderboard API
+  description: The leaderboard API from OnTopX402 — 2 operation(s) for leaderboard.
+  humanURL: https://ontopx402.com/
+  baseURL: https://ontopx402.com
+  tags:
+  - leaderboard
+  properties:
+  - type: OpenAPI
+    url: openapi/ontopx402-leaderboard-api-openapi.yml
   - type: APIReference
     url: https://ontopx402.com/openapi.json
   - type: Documentation
