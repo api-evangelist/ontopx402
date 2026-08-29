@@ -9,6 +9,17 @@ description: >-
   USDC on Base or Solana. Operated by One Scales Inc.
 type: Index
 url: https://raw.githubusercontent.com/api-evangelist/ontopx402/refs/heads/main/apis.yml
+deliveryModel:
+  model: unknown
+  open_source: false
+  commercial: false
+  callable_host: true
+  label: Delivery model not determined — needs a product licence on record
+  confidence: low
+  source:
+  - openapi
+  generated: '2026-08-28'
+  method: derived
 created: '2026-08-24'
 modified: '2026-08-24'
 specificationVersion: '0.23'
