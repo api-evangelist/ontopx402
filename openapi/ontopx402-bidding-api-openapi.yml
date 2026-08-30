@@ -1,0 +1,482 @@
+openapi: 3.2.0
+info:
+  title: OnTopX402 Bidding API
+  description: A single public leaderboard where rank is decided by the amount paid. Submit a link, a description and an amount; you appear at whatever position that amount buys. Bids on the same link add up. Paid in USDC over x402 — no account, no API key.
+  version: 1.0.0
+  contact:
+    name: OnTopX402
+    url: https://ontopx402.com
+    email: info@ontopx402.com
+  x-openapi-url: https://ontopx402.com/openapi.json
+  x-provider: OnTopX402 — a leaderboard where rank is the amount paid. By One Scales Inc..
+  x-provider-url: https://ontopx402.com
+  x-guidance: 'A public leaderboard ordered by the amount paid. To be listed, POST /api/bid with a url, a description of at most 255 characters, and the amount you want to bid in US dollars. The amount you name IS the price you pay: the endpoint answers 402 with x402 payment requirements for exactly that amount. Pay them and send the request again with the X-PAYMENT header. Bidding again on a url already listed adds to its total rather than replacing it. Reading the board is free: GET /api/leaderboard and GET /api/entry need no payment.'
+  x-ai-instructions: 'A public leaderboard ordered by the amount paid. To be listed, POST /api/bid with a url, a description of at most 255 characters, and the amount you want to bid in US dollars. The amount you name IS the price you pay: the endpoint answers 402 with x402 payment requirements for exactly that amount. Pay them and send the request again with the X-PAYMENT header. Bidding again on a url already listed adds to its total rather than replacing it. Reading the board is free: GET /api/leaderboard and GET /api/entry need no payment.'
+  x-keywords:
+  - leaderboard
+  - ranking
+  - directory
+  - listing
+  - submit
+  - advertising
+  - paid-placement
+  - sponsored
+  - promotion
+  - marketing
+  - bidding
+  - auction
+  - outbid
+  - pay-per-rank
+  - link-listing
+  - backlink
+  - seo
+  - x402
+  - usdc
+  - base
+  - solana
+  - agent-payments
+  - agent-discovery
+  - micropayments
+  x-category: advertising
+  x-agentcash-auth:
+    mode: paid
+  x-pricing:
+    model: caller-priced
+    currency: USDC
+    network: Base and Solana
+    minimum: $1
+    minimum_atomic: '1000000'
+    maximum: $1,000,000
+    maximum_atomic: '1000000000000'
+    decimals: 6
+    example: Sending amount=25.00 produces a 402 quoting 25000000 atomic USDC.
+    note: The caller sets the price. The amount you bid is the amount you pay, and it decides your rank.
+  x-402:
+    resource: https://ontopx402.com/api/bid
+    price: caller-specified
+    minimum: $1
+    minimum_atomic: '1000000'
+    maximum_atomic: '1000000000000'
+    decimals: 6
+    currency: USDC
+    example_request:
+      url: https://example.com
+      description: What this link is.
+      amount: '25.00'
+    example_response:
+      ok: true
+      paid_usd: '25.00'
+      transaction: '0x9f2c1b7a4e6d8035c1a2f7b93d5e04c6a8b1d2e3f4056789abcdef0123456789'
+      network: eip155:8453
+      simulated: false
+      rank: 1
+      url: https://example.com
+      name: example.com
+      description: What this link is.
+      amount_usd: '25.00'
+      amount_atomic: 25000000
+      bids: 3
+      favicon: https://www.google.com/s2/favicons?domain=example.com&sz=64
+      first_bid_at: '2026-08-19T14:02:11+00:00'
+      updated_at: '2026-08-21T09:35:47+00:00'
+      page: https://ontopx402.com/e/example-com
+    network: eip155:8453
+    asset: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913'
+    pay_to: '0xE9740820225B3918b4ddd1292C7cA4Ca0e2C2F08'
+    facilitator: https://api.cdp.coinbase.com/platform/v2/x402
+    scheme: exact
+    description: Bid for a rank. The price of the call is the bid.
+    mime_type: application/json
+    networks:
+    - network: eip155:8453
+      asset: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913'
+      asset_symbol: USDC
+      pay_to: '0xE9740820225B3918b4ddd1292C7cA4Ca0e2C2F08'
+    - network: solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp
+      asset: EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v
+      asset_symbol: USDC
+      pay_to: 8ugAWAXDB8V18kiUrGZTq1oMvU3C6Fxs8hfC6rvzQT3b
+  x-logo:
+    url: https://ontopx402.com/static/favicon.svg
+    altText: OnTopX402
+servers:
+- url: https://ontopx402.com
+  description: OnTopX402 production
+tags:
+- name: bidding
+paths:
+  /api/bid:
+    post:
+      summary: Bid for a rank
+      description: 'Pay to appear on the board, or to climb it.
+
+
+        The amount you name is the amount you pay. Bidding again on the same link
+
+        adds to your total — it does not replace it. Money spent is spent: being
+
+        outbid later does not refund anything.
+
+
+        The bid can be sent as a JSON body **or** as query parameters. The query
+
+        form exists because most agent payment tools take nothing but a URL —
+
+        `awal x402 pay <url>`, `pay curl <url>` — and cannot attach a body.
+
+        Putting the whole bid in the URL keeps this endpoint usable by all of them.'
+      operationId: api_bid_api_bid_post
+      parameters:
+      - name: url
+        in: query
+        required: false
+        schema:
+          type: string
+          description: The link to rank. Use this instead of a body.
+          default: ''
+          title: Url
+        description: The link to rank. Use this instead of a body.
+      - name: description
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Up to 255 characters, shown on the board.
+          default: ''
+          title: Description
+        description: Up to 255 characters, shown on the board.
+      - name: amount
+        in: query
+        required: false
+        schema:
+          type: string
+          description: How much to bid, in US dollars.
+          default: ''
+          title: Amount
+        description: How much to bid, in US dollars.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BidRequest'
+            example:
+              url: https://example.com
+              description: What this link is.
+              amount: '25.00'
+        description: The bid. May also be sent as query parameters instead, for payment tools that can only fetch a URL.
+      responses:
+        '200':
+          description: Paid and listed. The board already reflects this bid.
+          headers:
+            X-PAYMENT-RESPONSE:
+              description: Base64 x402 settlement receipt, including the transaction hash.
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BidSuccess'
+              examples:
+                settled:
+                  summary: A bid that settled
+                  value:
+                    ok: true
+                    paid_usd: '25.00'
+                    transaction: '0x9f2c1b7a4e6d8035c1a2f7b93d5e04c6a8b1d2e3f4056789abcdef0123456789'
+                    network: eip155:8453
+                    simulated: false
+                    rank: 1
+                    url: https://example.com
+                    name: example.com
+                    description: What this link is.
+                    amount_usd: '25.00'
+                    amount_atomic: 25000000
+                    bids: 3
+                    favicon: https://www.google.com/s2/favicons?domain=example.com&sz=64
+                    first_bid_at: '2026-08-19T14:02:11+00:00'
+                    updated_at: '2026-08-21T09:35:47+00:00'
+                    page: https://ontopx402.com/e/example-com
+                already_credited:
+                  summary: The same payment sent twice
+                  description: A replayed transaction is never credited a second time. The current entry is returned unchanged, and nothing further is charged.
+                  value:
+                    already_credited: true
+                    rank: 1
+                    url: https://example.com
+                    name: example.com
+                    description: What this link is.
+                    amount_usd: '25.00'
+                    amount_atomic: 25000000
+                    bids: 3
+                    favicon: https://www.google.com/s2/favicons?domain=example.com&sz=64
+                    first_bid_at: '2026-08-19T14:02:11+00:00'
+                    updated_at: '2026-08-21T09:35:47+00:00'
+                    page: https://ontopx402.com/e/example-com
+        '400':
+          description: The url, description or amount is unusable. Nothing was charged.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                below_minimum:
+                  value:
+                    error: The minimum bid is $1.00.
+                bad_url:
+                  value:
+                    error: That does not look like a web address.
+                no_description:
+                  value:
+                    error: Write a short description.
+        '429':
+          description: Too many requests from one address.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                error: Too many requests. Slow down.
+        '402':
+          description: Payment required. The body is an x402 v2 payment-required object whose `accepts` entries are priced at exactly the amount you asked to bid, on Base and Solana. Pay one of them and send the request again with the X-PAYMENT header. Nothing is charged and no row is written until the payment settles.
+          headers:
+            PAYMENT-REQUIRED:
+              description: The same payment-required object, base64-encoded. Sent on every 402 so a client that reads only headers still sees it.
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentRequired'
+              examples:
+                priced_at_your_bid:
+                  summary: Quoted for a $25.00 bid
+                  value:
+                    x402Version: 2
+                    error: Payment required
+                    resource:
+                      url: https://ontopx402.com/api/bid
+                      description: Rank on ontopx402.com for example.com
+                      mimeType: application/json
+                      serviceName: OnTopX402
+                    accepts:
+                    - scheme: exact
+                      network: eip155:8453
+                      asset: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913'
+                      amount: '25000000'
+                      payTo: '0xE9740820225B3918b4ddd1292C7cA4Ca0e2C2F08'
+                      maxTimeoutSeconds: 300
+                    - scheme: exact
+                      network: solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp
+                      asset: EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v
+                      amount: '25000000'
+                      payTo: 8ugAWAXDB8V18kiUrGZTq1oMvU3C6Fxs8hfC6rvzQT3b
+                      maxTimeoutSeconds: 300
+                settlement_failed:
+                  summary: A payment that did not settle
+                  description: Nothing was charged and no row was written.
+                  value:
+                    error: The payment did not go through. Nothing was charged.
+                    reason: settle_failed
+      x-guidance: 'A public leaderboard ordered by the amount paid. To be listed, POST /api/bid with a url, a description of at most 255 characters, and the amount you want to bid in US dollars. The amount you name IS the price you pay: the endpoint answers 402 with x402 payment requirements for exactly that amount. Pay them and send the request again with the X-PAYMENT header. Bidding again on a url already listed adds to its total rather than replacing it. Reading the board is free: GET /api/leaderboard and GET /api/entry need no payment.'
+      x-ai-instructions: 'A public leaderboard ordered by the amount paid. To be listed, POST /api/bid with a url, a description of at most 255 characters, and the amount you want to bid in US dollars. The amount you name IS the price you pay: the endpoint answers 402 with x402 payment requirements for exactly that amount. Pay them and send the request again with the X-PAYMENT header. Bidding again on a url already listed adds to its total rather than replacing it. Reading the board is free: GET /api/leaderboard and GET /api/entry need no payment.'
+      x-payment-info:
+        price:
+          dynamic:
+            mode: caller-specified
+            currency: USD
+            minimum: '1'
+            field: amount
+        protocols:
+        - x402: {}
+      tags:
+      - bidding
+components:
+  schemas:
+    Entry:
+      type: object
+      title: Entry
+      description: One listing on the board.
+      properties:
+        rank:
+          type: integer
+          minimum: 1
+          description: Position on the board. 1 is the top. Computed on read from the total paid, never stored.
+        url:
+          type: string
+          format: uri
+          description: The listed link, normalised.
+        name:
+          type: string
+          description: Display name, derived from the host.
+        description:
+          type: string
+          maxLength: 255
+          description: What the latest bid said this link is.
+        amount_usd:
+          type: string
+          pattern: ^\d+\.\d{2}$
+          description: Lifetime total paid on this link, in US dollars. A string, not a float — money is never a float here.
+        amount_atomic:
+          type: integer
+          description: The same total in atomic USDC units (6 decimals). Use this one for arithmetic.
+        bids:
+          type: integer
+          description: How many settled bids make up the total.
+        favicon:
+          type: string
+          format: uri
+        first_bid_at:
+          type: string
+          format: date-time
+          description: 'When this link first appeared. Breaks ties: on an equal total, whoever arrived first ranks higher.'
+        updated_at:
+          type: string
+          format: date-time
+          description: When the most recent bid settled.
+        page:
+          type: string
+          format: uri
+          description: Human-readable page for this entry, with its full bid history.
+      required:
+      - rank
+      - url
+      - name
+      - description
+      - amount_usd
+      - amount_atomic
+      - bids
+      - first_bid_at
+      - updated_at
+      - page
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: What went wrong, in plain words.
+        example:
+          type: string
+          description: A working call, when the problem was a missing or malformed field.
+      required:
+      - error
+    PaymentRequired:
+      type: object
+      description: An x402 v2 payment-required object, priced at exactly the amount you asked to bid, on Base and Solana. The same object is also sent base64-encoded in the PAYMENT-REQUIRED response header. Pay one of the `accepts` entries and send the request again with the X-PAYMENT header.
+      properties:
+        x402Version:
+          type: integer
+          const: 2
+        error:
+          type: string
+          example: Payment required
+        resource:
+          type: object
+          description: What is being sold, and its tags.
+        accepts:
+          type: array
+          description: One entry per network. Every entry is priced identically — pick whichever chain you hold USDC on.
+          items:
+            type: object
+            properties:
+              scheme:
+                type: string
+                const: exact
+              network:
+                type: string
+              asset:
+                type: string
+              amount:
+                type: string
+                description: Atomic USDC units (6 decimals). This equals the amount you asked to bid.
+              payTo:
+                type: string
+              maxTimeoutSeconds:
+                type: integer
+        extensions:
+          type: object
+          description: 'Carries the `bazaar` discovery block: the request shape, with an example.'
+      required:
+      - x402Version
+      - accepts
+    BidSuccess:
+      type: object
+      description: The bid settled and the board has already changed.
+      allOf:
+      - $ref: '#/components/schemas/Entry'
+      properties:
+        ok:
+          type: boolean
+          const: true
+        paid_usd:
+          type: string
+          description: What this one bid cost.
+        transaction:
+          type: string
+          description: Settlement transaction hash. Unique — the same payment can never be credited twice.
+        network:
+          type: string
+          description: Which chain it settled on.
+        simulated:
+          type: boolean
+          description: True only on a test deployment with payments off. Always false in production.
+      required:
+      - ok
+      - paid_usd
+      - transaction
+      - network
+    BidRequest:
+      properties:
+        url:
+          type: string
+          title: Url
+          description: The link you want ranked.
+          examples:
+          - https://example.com
+        description:
+          type: string
+          title: Description
+          description: Up to 255 characters, shown on the board.
+          examples:
+          - The thing we make.
+        amount:
+          type: string
+          title: Amount
+          description: How much to bid, in US dollars. Minimum $1.
+          examples:
+          - '25.00'
+          pattern: ^\$?\d+(\.\d{1,6})?$
+      type: object
+      title: BidRequest
+      description: 'A bid: which link to rank, what to say about it, and how much to pay. All three are required. The amount you name is the amount you pay and the amount that decides your rank.'
+      required:
+      - url
+      - description
+      - amount
+      example:
+        url: https://example.com
+        description: What this link is.
+        amount: '25.00'
+x-payment-accepts:
+- scheme: exact
+  network: eip155:8453
+  asset: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913'
+  payTo: '0xE9740820225B3918b4ddd1292C7cA4Ca0e2C2F08'
+  amount: '1000000'
+  amountMode: caller-specified
+  minAmount: '1000000'
+  maxAmount: '1000000000000'
+  amountDecimals: 6
+  amountNote: The amount shown is the $1 minimum. The 402 is priced at whatever amount you send.
+  maxTimeoutSeconds: 300
+- scheme: exact
+  network: solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp
+  asset: EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v
+  payTo: 8ugAWAXDB8V18kiUrGZTq1oMvU3C6Fxs8hfC6rvzQT3b
+  amount: '1000000'
+  amountMode: caller-specified
+  minAmount: '1000000'
+  maxAmount: '1000000000000'
+  amountDecimals: 6
+  amountNote: The amount shown is the $1 minimum. The 402 is priced at whatever amount you send.
+  maxTimeoutSeconds: 300

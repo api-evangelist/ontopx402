@@ -1,0 +1,373 @@
+openapi: 3.2.0
+info:
+  title: OnTopX402 Leaderboard API
+  description: A single public leaderboard where rank is decided by the amount paid. Submit a link, a description and an amount; you appear at whatever position that amount buys. Bids on the same link add up. Paid in USDC over x402 — no account, no API key.
+  version: 1.0.0
+  contact:
+    name: OnTopX402
+    url: https://ontopx402.com
+    email: info@ontopx402.com
+  x-openapi-url: https://ontopx402.com/openapi.json
+  x-provider: OnTopX402 — a leaderboard where rank is the amount paid. By One Scales Inc..
+  x-provider-url: https://ontopx402.com
+  x-guidance: 'A public leaderboard ordered by the amount paid. To be listed, POST /api/bid with a url, a description of at most 255 characters, and the amount you want to bid in US dollars. The amount you name IS the price you pay: the endpoint answers 402 with x402 payment requirements for exactly that amount. Pay them and send the request again with the X-PAYMENT header. Bidding again on a url already listed adds to its total rather than replacing it. Reading the board is free: GET /api/leaderboard and GET /api/entry need no payment.'
+  x-ai-instructions: 'A public leaderboard ordered by the amount paid. To be listed, POST /api/bid with a url, a description of at most 255 characters, and the amount you want to bid in US dollars. The amount you name IS the price you pay: the endpoint answers 402 with x402 payment requirements for exactly that amount. Pay them and send the request again with the X-PAYMENT header. Bidding again on a url already listed adds to its total rather than replacing it. Reading the board is free: GET /api/leaderboard and GET /api/entry need no payment.'
+  x-keywords:
+  - leaderboard
+  - ranking
+  - directory
+  - listing
+  - submit
+  - advertising
+  - paid-placement
+  - sponsored
+  - promotion
+  - marketing
+  - bidding
+  - auction
+  - outbid
+  - pay-per-rank
+  - link-listing
+  - backlink
+  - seo
+  - x402
+  - usdc
+  - base
+  - solana
+  - agent-payments
+  - agent-discovery
+  - micropayments
+  x-category: advertising
+  x-agentcash-auth:
+    mode: paid
+  x-pricing:
+    model: caller-priced
+    currency: USDC
+    network: Base and Solana
+    minimum: $1
+    minimum_atomic: '1000000'
+    maximum: $1,000,000
+    maximum_atomic: '1000000000000'
+    decimals: 6
+    example: Sending amount=25.00 produces a 402 quoting 25000000 atomic USDC.
+    note: The caller sets the price. The amount you bid is the amount you pay, and it decides your rank.
+  x-402:
+    resource: https://ontopx402.com/api/bid
+    price: caller-specified
+    minimum: $1
+    minimum_atomic: '1000000'
+    maximum_atomic: '1000000000000'
+    decimals: 6
+    currency: USDC
+    example_request:
+      url: https://example.com
+      description: What this link is.
+      amount: '25.00'
+    example_response:
+      ok: true
+      paid_usd: '25.00'
+      transaction: '0x9f2c1b7a4e6d8035c1a2f7b93d5e04c6a8b1d2e3f4056789abcdef0123456789'
+      network: eip155:8453
+      simulated: false
+      rank: 1
+      url: https://example.com
+      name: example.com
+      description: What this link is.
+      amount_usd: '25.00'
+      amount_atomic: 25000000
+      bids: 3
+      favicon: https://www.google.com/s2/favicons?domain=example.com&sz=64
+      first_bid_at: '2026-08-19T14:02:11+00:00'
+      updated_at: '2026-08-21T09:35:47+00:00'
+      page: https://ontopx402.com/e/example-com
+    network: eip155:8453
+    asset: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913'
+    pay_to: '0xE9740820225B3918b4ddd1292C7cA4Ca0e2C2F08'
+    facilitator: https://api.cdp.coinbase.com/platform/v2/x402
+    scheme: exact
+    description: Bid for a rank. The price of the call is the bid.
+    mime_type: application/json
+    networks:
+    - network: eip155:8453
+      asset: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913'
+      asset_symbol: USDC
+      pay_to: '0xE9740820225B3918b4ddd1292C7cA4Ca0e2C2F08'
+    - network: solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp
+      asset: EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v
+      asset_symbol: USDC
+      pay_to: 8ugAWAXDB8V18kiUrGZTq1oMvU3C6Fxs8hfC6rvzQT3b
+  x-logo:
+    url: https://ontopx402.com/static/favicon.svg
+    altText: OnTopX402
+servers:
+- url: https://ontopx402.com
+  description: OnTopX402 production
+tags:
+- name: leaderboard
+paths:
+  /api/leaderboard:
+    get:
+      summary: Read the leaderboard
+      description: The current ranking, highest total paid first. Free, no payment needed.
+      operationId: api_leaderboard_api_leaderboard_get
+      parameters:
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 500
+          minimum: 1
+          default: 50
+          title: Limit
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          default: 0
+          title: Offset
+      responses:
+        '200':
+          description: The board, highest total paid first.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Leaderboard'
+              example:
+                count: 2
+                total_paid_usd: '37.00'
+                top_amount_usd: '25.00'
+                to_take_first_usd: '26.00'
+                entries:
+                - rank: 1
+                  url: https://example.com
+                  name: example.com
+                  description: What this link is.
+                  amount_usd: '25.00'
+                  amount_atomic: 25000000
+                  bids: 3
+                  favicon: https://www.google.com/s2/favicons?domain=example.com&sz=64
+                  first_bid_at: '2026-08-19T14:02:11+00:00'
+                  updated_at: '2026-08-21T09:35:47+00:00'
+                  page: https://ontopx402.com/e/example-com
+                - rank: 2
+                  url: https://another.example
+                  name: another.example
+                  description: A different link.
+                  amount_usd: '12.00'
+                  amount_atomic: 12000000
+                  bids: 1
+                  favicon: https://www.google.com/s2/favicons?domain=another.example&sz=64
+                  first_bid_at: '2026-08-19T14:02:11+00:00'
+                  updated_at: '2026-08-21T09:35:47+00:00'
+                  page: https://ontopx402.com/e/another-example
+        '429':
+          description: Too many free reads from one address.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                error: Too many requests. Slow down.
+      tags:
+      - leaderboard
+      x-payment-info:
+        price:
+          free: {}
+        protocols: []
+  /api/entry:
+    get:
+      summary: Look up one entry
+      description: Where a given link currently sits, and what it would cost to pass the one above.
+      operationId: api_entry_api_entry_get
+      parameters:
+      - name: url
+        in: query
+        required: true
+        schema:
+          type: string
+          title: Url
+      responses:
+        '200':
+          description: This link is listed. Includes what it would cost to pass the entry directly above it.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntryLookup'
+              example:
+                rank: 2
+                url: https://example.com
+                name: example.com
+                description: What this link is.
+                amount_usd: '12.00'
+                amount_atomic: 12000000
+                bids: 3
+                favicon: https://www.google.com/s2/favicons?domain=example.com&sz=64
+                first_bid_at: '2026-08-19T14:02:11+00:00'
+                updated_at: '2026-08-21T09:35:47+00:00'
+                page: https://ontopx402.com/e/example-com
+                listed: true
+                to_pass_the_one_above_usd: '14.00'
+        '400':
+          description: The url could not be read.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                error: That does not look like a web address.
+        '404':
+          description: This link is not on the board yet. The reply still tells you what first place currently costs.
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                listed: false
+                url: https://nobody-has-bid-on-this.example
+                to_take_first_usd: '26.00'
+        '429':
+          description: Too many free reads from one address.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                error: Too many requests. Slow down.
+      tags:
+      - leaderboard
+      x-payment-info:
+        price:
+          free: {}
+        protocols: []
+components:
+  schemas:
+    Leaderboard:
+      type: object
+      properties:
+        count:
+          type: integer
+          description: How many live entries exist in total.
+        total_paid_usd:
+          type: string
+          description: Everything ever paid into the board.
+        top_amount_usd:
+          type: string
+          description: What the current number one has paid.
+        to_take_first_usd:
+          type: string
+          description: What a single bid would have to be, right now, to take the top spot outright.
+        entries:
+          type: array
+          items:
+            $ref: '#/components/schemas/Entry'
+      required:
+      - count
+      - total_paid_usd
+      - top_amount_usd
+      - to_take_first_usd
+      - entries
+    Entry:
+      type: object
+      title: Entry
+      description: One listing on the board.
+      properties:
+        rank:
+          type: integer
+          minimum: 1
+          description: Position on the board. 1 is the top. Computed on read from the total paid, never stored.
+        url:
+          type: string
+          format: uri
+          description: The listed link, normalised.
+        name:
+          type: string
+          description: Display name, derived from the host.
+        description:
+          type: string
+          maxLength: 255
+          description: What the latest bid said this link is.
+        amount_usd:
+          type: string
+          pattern: ^\d+\.\d{2}$
+          description: Lifetime total paid on this link, in US dollars. A string, not a float — money is never a float here.
+        amount_atomic:
+          type: integer
+          description: The same total in atomic USDC units (6 decimals). Use this one for arithmetic.
+        bids:
+          type: integer
+          description: How many settled bids make up the total.
+        favicon:
+          type: string
+          format: uri
+        first_bid_at:
+          type: string
+          format: date-time
+          description: 'When this link first appeared. Breaks ties: on an equal total, whoever arrived first ranks higher.'
+        updated_at:
+          type: string
+          format: date-time
+          description: When the most recent bid settled.
+        page:
+          type: string
+          format: uri
+          description: Human-readable page for this entry, with its full bid history.
+      required:
+      - rank
+      - url
+      - name
+      - description
+      - amount_usd
+      - amount_atomic
+      - bids
+      - first_bid_at
+      - updated_at
+      - page
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: What went wrong, in plain words.
+        example:
+          type: string
+          description: A working call, when the problem was a missing or malformed field.
+      required:
+      - error
+    EntryLookup:
+      type: object
+      description: A listed link returns its entry plus what it would take to pass the one above it. An unlisted link returns 404 with the price of first place.
+      allOf:
+      - $ref: '#/components/schemas/Entry'
+      properties:
+        listed:
+          type: boolean
+          const: true
+        to_pass_the_one_above_usd:
+          type: string
+          description: A single bid of this size would move this entry above the one ranked directly above it. Absent when it is already number one.
+x-payment-accepts:
+- scheme: exact
+  network: eip155:8453
+  asset: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913'
+  payTo: '0xE9740820225B3918b4ddd1292C7cA4Ca0e2C2F08'
+  amount: '1000000'
+  amountMode: caller-specified
+  minAmount: '1000000'
+  maxAmount: '1000000000000'
+  amountDecimals: 6
+  amountNote: The amount shown is the $1 minimum. The 402 is priced at whatever amount you send.
+  maxTimeoutSeconds: 300
+- scheme: exact
+  network: solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp
+  asset: EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v
+  payTo: 8ugAWAXDB8V18kiUrGZTq1oMvU3C6Fxs8hfC6rvzQT3b
+  amount: '1000000'
+  amountMode: caller-specified
+  minAmount: '1000000'
+  maxAmount: '1000000000000'
+  amountDecimals: 6
+  amountNote: The amount shown is the $1 minimum. The 402 is priced at whatever amount you send.
+  maxTimeoutSeconds: 300
