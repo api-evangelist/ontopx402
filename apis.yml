@@ -25,12 +25,10 @@ modified: '2026-08-24'
 specificationVersion: '0.23'
 tags:
 - x402
-- Agent Commerce
-- Machine Payments
-- Advertising
-- Paid Placement
-- Leaderboard
 - USDC
+- agent-payments
+- paid-placement
+- Leaderboard
 tags_raw:
 - x402
 - usdc
@@ -44,6 +42,8 @@ apis:
   humanURL: https://ontopx402.com/
   baseURL: https://ontopx402.com
   tags:
+  - Bidding
+  tags_raw:
   - bidding
   properties:
   - type: OpenAPI
@@ -62,6 +62,8 @@ apis:
   humanURL: https://ontopx402.com/
   baseURL: https://ontopx402.com
   tags:
+  - Leaderboard
+  tags_raw:
   - leaderboard
   properties:
   - type: OpenAPI
