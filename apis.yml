@@ -26,7 +26,7 @@ specificationVersion: '0.23'
 tags:
 - x402
 - USDC
-- agent-payments
+- Agent Payments
 - paid-placement
 - Leaderboard
 tags_raw:
