@@ -1,0 +1,58 @@
+generated: '2026-09-03'
+method: searched
+source: https://ontopx402.com/llms.txt
+docs: https://ontopx402.com/llms.txt
+note: >-
+  Cross-cutting semantics from the provider's llms.txt, /rules page and OpenAPI.
+  Three operations, one of them a write; no accounts anywhere.
+auth_style: >-
+  No API keys, OAuth or accounts. Reads anonymous; the single write (POST /api/bid)
+  is gated by an x402 v2 payment challenge (X-PAYMENT header). See
+  authentication/ontopx402-authentication.yml.
+idempotency:
+  coverage: full
+  mechanism: settled-transaction dedup (x402), not an Idempotency-Key header
+  description: >-
+    Documented replay protection covers the entire mutating surface (POST /api/bid
+    is the only write). "Send the same payment twice and you get
+    {"already_credited": true} with the entry unchanged — a settled transaction is
+    never counted a second time." The OpenAPI carries this as the already_credited
+    response example. Additionally nothing is charged and no row is written until
+    the payment settles, so a failed attempt is safely retryable.
+  docs: https://ontopx402.com/llms.txt
+pagination:
+  style: offset
+  params: [limit, offset]
+  response_fields: [count, entries]
+  applies_to: [api_leaderboard_api_leaderboard_get]
+versioning:
+  scheme: none documented
+  note: The OpenAPI is version 1.0.0; no versioned paths, headers or deprecation signals exist.
+error_envelope:
+  shape: '{"error": "<sentence>"}'
+  format: vendor-json
+  see: errors/ontopx402-problem-types.yml
+rate_limit_signaling:
+  status: 429
+  headers: none documented; a live GET /api/leaderboard response carried no RateLimit/X-RateLimit/Retry-After headers (probed 2026-09-03)
+  scope: per-address, free reads only
+request_semantics:
+  dual_form: >-
+    POST /api/bid accepts the same three fields as a JSON body or as query
+    parameters — the query form exists because most agent payment tools accept a
+    URL and nothing else.
+  identity: >-
+    A link is its own identity: there are no accounts, anyone may add to any
+    listing, and the most recent bid writes the description. Tracking parameters
+    are stripped; paths count, so two pages on one domain are two listings.
+reversibility:
+  status: none
+  description: >-
+    No reversal operation exists on the API, and irreversibility is documented
+    policy rather than an omission: "Being outbid refunds nothing. The money bought
+    the position for as long as it held it." and "Removals after the fact are not
+    refunded." A site owner who wants a listing of their site gone emails
+    info@ontopx402.com — the listing comes down but the money is not refunded to
+    whoever paid it. Agents should treat every bid as final before paying.
+  operations: []
+  docs: https://ontopx402.com/rules

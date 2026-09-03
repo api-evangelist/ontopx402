@@ -1,0 +1,16 @@
+generated: '2026-09-03'
+method: searched
+source: https://ontopx402.com/llms.txt
+note: >-
+  The provider documents that free reads are rate limited per address (429 "Too
+  many free reads from one address") but publishes no numeric limits or windows.
+  A live GET /api/leaderboard response (probed 2026-09-03, HTTP 200) carried no
+  RateLimit, X-RateLimit-* or Retry-After headers. Paid writes are throttled by
+  price, not by quota. An honest zero: the signal exists (429), the numbers do not.
+limit_count: 0
+limits: []
+exhaustion:
+  status: 429
+  body: '{"error": "Too many requests. Slow down."}'
+  headers: none documented or observed
+  scope: per-address, free reads (GET /api/leaderboard, GET /api/entry)

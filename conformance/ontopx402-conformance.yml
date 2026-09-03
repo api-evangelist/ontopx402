@@ -1,0 +1,33 @@
+generated: '2026-09-03'
+method: derived
+source: openapi/ontopx402-bidding-api-openapi.yml, finops/ontopx402-x402-challenge.json, https://ontopx402.com/llms.txt
+note: >-
+  Derived from the provider's own contract and a live probe of the 402 challenge.
+  The domain standard here is x402 v2 (agent payments), which the contract declares
+  in its own schema rather than as a prose claim.
+standards:
+- id: x402
+  conforms: true
+  domain_standard: true
+  version: '2'
+  evidence: >-
+    The contract itself declares the standard: openapi paths./api/bid.post.responses.402
+    schema $ref PaymentRequired with x402Version 2, an x-payment-info extension
+    (dynamic caller-specified USD pricing, protocols [x402]), and a PAYMENT-REQUIRED
+    header carrying the same object base64-encoded. A live unauthenticated POST
+    /api/bid returned that exact challenge (saved verbatim at
+    finops/ontopx402-x402-challenge.json), including a bazaar extension carrying
+    JSON Schema 2020-12 for the request body. Settlement via the Coinbase CDP
+    facilitator https://api.cdp.coinbase.com/platform/v2/x402.
+- id: caip-2
+  conforms: true
+  evidence: Networks are identified by CAIP-2 chain ids in accepts[].network — eip155:8453 (Base) and solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp.
+- id: pagination
+  conforms: true
+  evidence: GET /api/leaderboard takes limit and offset query parameters and returns count alongside entries[].
+- id: rfc9457
+  conforms: false
+  evidence: Errors are a vendor JSON envelope {"error":"..."}, not application/problem+json (see errors/ontopx402-problem-types.yml).
+- id: oauth2
+  conforms: false
+  evidence: No OAuth, no accounts, no securitySchemes — writes are payment-gated via x402, not credential-gated. /.well-known/oauth-authorization-server 404.

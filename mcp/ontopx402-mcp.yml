@@ -1,0 +1,42 @@
+generated: '2026-09-03'
+method: derived
+source: openapi/ontopx402-bidding-api-openapi.yml, openapi/ontopx402-leaderboard-api-openapi.yml
+status: candidate
+name: OnTopX402 MCP (candidate)
+note: >-
+  OnTopX402 ships no MCP server. POST https://ontopx402.com/mcp returns the site's
+  404 page and POST https://ontopx402.com/api/mcp returns 404 {"error":"No such
+  endpoint."} (probed 2026-09-03). The provider's own agent story is x402-native
+  instead: any x402 client can read the board free and pay-to-bid directly against
+  the HTTP API, and the 402 challenge carries a bazaar extension with full JSON
+  Schema for the request. The tools below are a candidate mapping derived from the
+  three OpenAPI operations; nobody ships them.
+deployment:
+  mode: none
+  endpoint: ''
+  install: ''
+  package: ''
+  auth: none
+  verified: probed
+tools:
+- name: read_leaderboard
+  description: Read the current money-ranked board, highest total paid first. Free, no key.
+  operationId: api_leaderboard_api_leaderboard_get
+  method: GET
+  path: /api/leaderboard
+  parameters: [limit, offset]
+- name: read_entry
+  description: Read one listing by url, including what it would cost to pass the entry above it. Free, no key.
+  operationId: api_entry_api_entry_get
+  method: GET
+  path: /api/entry
+  parameters: [url]
+- name: bid_for_rank
+  description: >-
+    Submit or raise a bid on a link. Answers HTTP 402 with x402 v2 payment
+    requirements priced at exactly the named amount (USDC on Base or Solana);
+    pay and resend with the X-PAYMENT header to be listed.
+  operationId: api_bid_api_bid_post
+  method: POST
+  path: /api/bid
+  parameters: [url, description, amount]

@@ -1,0 +1,17 @@
+generated: '2026-09-03'
+method: searched
+source: https://ontopx402.com/llms.txt
+note: >-
+  Searched the site, llms.txt and OpenAPI: no status page, no changelog, no
+  deprecation or sunset policy, no SLA and no versioning scheme are published.
+  The llms.txt does state one operational behavior: a 402 whose body says payments
+  are unavailable means the facilitator is unreachable, nothing was charged, retry
+  later ("Status: payments are LIVE" is a line in llms.txt, not a status page).
+  No StatusPage or Deprecation pointers are emitted because neither exists.
+versioning:
+  scheme: none documented
+  current_version: 1.0.0 (OpenAPI info.version)
+deprecation_policy: none published
+deprecated_operations: []
+status_page: none published
+sla: none published

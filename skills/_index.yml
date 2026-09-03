@@ -1,0 +1,11 @@
+generated: '2026-09-03'
+method: generated
+source: openapi/ontopx402-bidding-api-openapi.yml, openapi/ontopx402-leaderboard-api-openapi.yml, https://ontopx402.com/llms.txt
+note: Generated skills mirroring the provider's two real flows; no provider-published skills or AGENTS.md exist (searched 2026-09-03).
+skills:
+- file: ontopx402-read-the-board.md
+  name: ontopx402-read-the-board
+  api: OnTopX402 Leaderboard API
+- file: ontopx402-bid-for-rank.md
+  name: ontopx402-bid-for-rank
+  api: OnTopX402 Bidding API

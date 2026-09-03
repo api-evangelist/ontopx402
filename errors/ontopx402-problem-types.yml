@@ -1,0 +1,36 @@
+generated: '2026-09-03'
+method: derived
+source: openapi/ontopx402-bidding-api-openapi.yml, openapi/ontopx402-leaderboard-api-openapi.yml, https://ontopx402.com/llms.txt
+format: vendor-json
+note: >-
+  Errors are a plain JSON envelope {"error": "<sentence>"} — not RFC 9457
+  application/problem+json. The 402 is not an error in the usual sense: its body is
+  a complete x402 v2 payment-required object (see finops/ontopx402-x402-challenge.json),
+  also base64-encoded in a PAYMENT-REQUIRED response header. The provider's stated
+  invariant on every failure: nothing is charged and no row is written until a
+  payment settles.
+problem_types:
+- status: 400
+  title: Unusable input
+  detail: The url, description or amount is unusable. Nothing was charged.
+  examples:
+  - The minimum bid is $1.00.
+  - That does not look like a web address.
+  - Write a short description.
+  remediation: Send a real web URL, a description of at most 255 characters, and an amount of at least $1.
+- status: 402
+  title: Payment required
+  detail: >-
+    x402 v2 payment-required object priced at exactly the amount you asked to bid,
+    with accepts[] entries for USDC on Base (eip155:8453) and Solana. Also returned
+    when a submitted payment did not verify or settle (reason: settle_failed) — in
+    that case nothing was charged.
+  remediation: Pay one of the accepts[] entries within maxTimeoutSeconds (300) and resend the identical request with the X-PAYMENT header.
+- status: 404
+  title: No such listing
+  detail: 'GET /api/entry for a url not on the board returns {"listed": false}.'
+  remediation: Nothing to fix — the link is simply not listed. POST /api/bid to list it.
+- status: 429
+  title: Too many requests
+  detail: Too many free reads from one address. No Retry-After or RateLimit headers are documented or observed.
+  remediation: Slow down and retry.

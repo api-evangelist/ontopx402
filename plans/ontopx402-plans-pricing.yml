@@ -1,0 +1,21 @@
+generated: '2026-09-03'
+method: searched
+source: https://ontopx402.com/rules
+note: >-
+  There are no tiers, subscriptions or quotas. Pricing is the product: the amount a
+  caller names in a bid IS the price of the call, settled per-request in USDC over
+  x402. Reads are free. Confirmed live — an unauthenticated POST /api/bid returns a
+  402 priced at the named amount (finops/ontopx402-x402-challenge.json shows the $1
+  minimum challenge).
+plan_count: 1
+plans:
+- name: Pay-per-bid
+  price: caller-specified, minimum $1.00, no maximum
+  currency: USD (settled as USDC)
+  billing_period: per-request (x402, settles before the row is written)
+  included: >-
+    One bid: lists the link at whatever rank the lifetime total on it reaches.
+    Bids on the same link stack; they never replace. Free with no payment: GET
+    /api/leaderboard and GET /api/entry (rate limited per address).
+  overage: not applicable — every write is individually priced
+  limits: minimum bid $1; description max 255 characters; being outbid refunds nothing

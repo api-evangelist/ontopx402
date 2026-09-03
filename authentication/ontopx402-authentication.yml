@@ -1,0 +1,26 @@
+generated: '2026-09-03'
+method: searched
+source: https://ontopx402.com/llms.txt
+docs: https://ontopx402.com/llms.txt
+note: >-
+  There are no accounts, API keys, OAuth flows or cards, by design — "the payment is
+  the account." The OpenAPI declares no securitySchemes. Reads are anonymous; the
+  only write is gated by an x402 v2 payment challenge instead of credentials.
+schemes:
+- name: none (anonymous reads)
+  type: none
+  applies_to:
+  - api_leaderboard_api_leaderboard_get
+  - api_entry_api_entry_get
+  description: GET /api/leaderboard and GET /api/entry are free and need no key. Free reads are rate limited per address (429).
+- name: x402 payment (X-PAYMENT header)
+  type: x402
+  applies_to:
+  - api_bid_api_bid_post
+  description: >-
+    POST /api/bid with no payment header answers 402 carrying x402Version 2 payment
+    requirements priced at the caller-named amount, payable in USDC on Base
+    (eip155:8453, facilitator https://api.cdp.coinbase.com/platform/v2/x402) or
+    Solana. The caller pays and resends the identical request with the X-PAYMENT
+    header; the settlement receipt returns in X-PAYMENT-RESPONSE. A settled
+    transaction is never credited twice.

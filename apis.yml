@@ -20,8 +20,19 @@ deliveryModel:
   - openapi
   generated: '2026-08-28'
   method: derived
+accessModel:
+  pricing: unknown
+  onboarding: open
+  trial: false
+  try_now: false
+  public: true
+  label: Open access
+  confidence: low
+  source: []
+  generated: '2026-09-02'
+  method: derived
 created: '2026-08-24'
-modified: '2026-08-24'
+modified: '2026-09-03'
 specificationVersion: '0.23'
 tags:
 - x402
@@ -56,6 +67,8 @@ apis:
     url: finops/ontopx402-x402-challenge.json
   - type: Examples
     url: examples/ontopx402-leaderboard-example.json
+  - type: Overlay
+    url: overlays/ontopx402-bidding-api-overlay.yaml
 - aid: ontopx402:ontopx402-leaderboard-api
   name: OnTopX402 Leaderboard API
   description: The leaderboard API from OnTopX402 — 2 operation(s) for leaderboard.
@@ -76,13 +89,39 @@ apis:
     url: finops/ontopx402-x402-challenge.json
   - type: Examples
     url: examples/ontopx402-leaderboard-example.json
+  - type: Overlay
+    url: overlays/ontopx402-leaderboard-api-overlay.yaml
 common:
+- type: DomainSecurity
+  url: security/ontopx402-domain-security.yml
 - type: LLMsTxt
   url: llms/ontopx402-llms.txt
 - type: Website
   url: https://ontopx402.com/
 - type: FinOps
   url: finops/ontopx402-x402-challenge.json
+- type: Authentication
+  url: authentication/ontopx402-authentication.yml
+- type: Conventions
+  url: conventions/ontopx402-conventions.yml
+- type: Idempotency
+  url: conventions/ontopx402-conventions.yml
+- type: ErrorCatalog
+  url: errors/ontopx402-problem-types.yml
+- type: Conformance
+  url: conformance/ontopx402-conformance.yml
+- type: DataModel
+  url: data-model/ontopx402-data-model.yml
+- type: Plans
+  url: plans/ontopx402-plans-pricing.yml
+- type: RateLimits
+  url: rate-limits/ontopx402-rate-limits.yml
+- type: Lifecycle
+  url: lifecycle/ontopx402-lifecycle.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: Pricing
+  url: https://ontopx402.com/rules
 maintainers:
 - FN: One Scales Inc.
   email: info@ontopx402.com
@@ -111,3 +150,8 @@ x-provenance:
     also a followed-backlink product, which is the category API Evangelist refuses when it arrives
     by email. Listed here on the standing rule that a valid company with a real API gets listed
     and the rating speaks; flagged for a policy decision rather than decided unilaterally.
+x-enrichment:
+  date: '2026-09-03'
+  status: enriched
+  artifacts_added: 16
+  pass: local-v2

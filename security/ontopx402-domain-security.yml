@@ -1,0 +1,16 @@
+generated: '2026-09-03'
+method: probed
+source: live DNS/TLS/HTTP probes of apis.yml + OpenAPI hosts
+hosts:
+- host: ontopx402.com
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Nov 19 02:30:28 2026 GMT
+  hsts: null
+domains:
+- domain: ontopx402.com
+  dnssec: false
+  caa: []
+  spf: true
+  dmarc: true
+  dmarc_policy: quarantine

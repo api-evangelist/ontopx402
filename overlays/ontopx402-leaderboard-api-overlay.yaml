@@ -1,0 +1,18 @@
+# generated: '2026-09-03'
+# method: generated
+# source: openapi/ontopx402-leaderboard-api-openapi.yml (extends the provider's https://ontopx402.com/openapi.json)
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements — OnTopX402 Leaderboard API
+  version: 1.0.0
+extends: https://ontopx402.com/openapi.json
+actions:
+- target: $.info.title
+  description: Retitle the tag-scoped split of the provider's single spec to name the free read surface.
+  update: OnTopX402 Leaderboard API
+- target: $.info.description
+  description: Per-API description for the leaderboard split — the two free read operations.
+  update: Read the money-ranked link leaderboard and individual entries. Free, unauthenticated, rate limited per address.
+- target: $.paths['/api/bid']
+  description: Removed from this split — the paid write lives in the bidding split (openapi/ontopx402-bidding-api-openapi.yml).
+  remove: true

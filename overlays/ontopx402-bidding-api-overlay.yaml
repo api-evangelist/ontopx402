@@ -1,0 +1,21 @@
+# generated: '2026-09-03'
+# method: generated
+# source: openapi/ontopx402-bidding-api-openapi.yml (extends the provider's https://ontopx402.com/openapi.json)
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements — OnTopX402 Bidding API
+  version: 1.0.0
+extends: https://ontopx402.com/openapi.json
+actions:
+- target: $.info.title
+  description: Retitle the tag-scoped split of the provider's single spec to name the bidding surface.
+  update: OnTopX402 Bidding API
+- target: $.info.description
+  description: Per-API description for the bidding split — the one paid operation, POST /api/bid.
+  update: A single public leaderboard where rank is decided by the amount paid. Submit a link, a description and an amount; you appear at whatever position that amount buys. Bids on the same link add up. Paid in USDC over x402 — no account, no API key.
+- target: $.paths['/api/leaderboard']
+  description: Removed from this split — read operations live in the leaderboard split (openapi/ontopx402-leaderboard-api-openapi.yml).
+  remove: true
+- target: $.paths['/api/entry']
+  description: Removed from this split — read operations live in the leaderboard split.
+  remove: true
