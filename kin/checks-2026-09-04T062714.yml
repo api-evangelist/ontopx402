@@ -1,16 +1,16 @@
 ---
 kin_checks:
   slug: ontopx402
-  schema_version: 0.18.1
-  scored_at: '2026-09-03'
-  run_ts: 2026-09-03T161828
+  schema_version: 0.18.2
+  scored_at: '2026-09-04'
+  run_ts: 2026-09-04T062714
   note: Actionable checks only (missed + partial). earned/na are every other check
-    in rubric/scoring-0.18.1.yml; counts below let you verify that.
+    in rubric/scoring-0.18.2.yml; counts below let you verify that.
   counts:
     total: 132
-    earned: 29
-    partial: 1
-    missed: 79
+    earned: 38
+    partial: 5
+    missed: 66
     na: 23
   checks:
   - id: image_present
@@ -60,8 +60,6 @@ kin_checks:
     status: missed
   - id: vocabulary_published
     status: missed
-  - id: conformance_declared
-    status: missed
   - id: overlay_published
     status: missed
   - id: change_log_present
@@ -86,8 +84,6 @@ kin_checks:
     status: missed
   - id: getting_started_present
     status: missed
-  - id: authentication_documented
-    status: missed
   - id: sdk_count_1
     status: missed
   - id: sdk_count_3
@@ -98,17 +94,11 @@ kin_checks:
     status: missed
   - id: postman_present
     status: missed
-  - id: agent_skill_present
-    status: missed
   - id: support_channel
     status: missed
   - id: blog_present
     status: missed
-  - id: plans_present
-    status: missed
   - id: plans_multiple
-    status: missed
-  - id: pricing_link
     status: missed
   - id: sign_up_present
     status: missed
@@ -124,10 +114,6 @@ kin_checks:
     status: missed
   - id: reg_oauth_scopes
     status: missed
-  - id: reg_authentication_documented
-    status: missed
-  - id: reg_security_disclosure
-    status: missed
   - id: reg_vulnerability_disclosure
     status: missed
   - id: reg_terms_of_service
@@ -135,8 +121,6 @@ kin_checks:
   - id: reg_privacy_policy
     status: missed
   - id: reg_compliance_published
-    status: missed
-  - id: reg_standards_conformance
     status: missed
   - id: reg_named_standard_conformance
     status: missed
@@ -148,17 +132,7 @@ kin_checks:
     status: missed
   - id: reversibility_documented
     status: missed
-  - id: mcp_server
-    status: missed
-  - id: auth_clarity
-    status: missed
-  - id: idempotency
-    status: missed
-  - id: rate_limit_signal
-    status: missed
   - id: event_surface_described
-    status: missed
-  - id: agent_skills
     status: missed
   - id: well_known_catalog
     status: missed
@@ -180,3 +154,19 @@ kin_checks:
     status: partial
     earned: 1.5
     detail: 1 of 2 openapi documents pass
+  - id: mcp_server
+    status: partial
+    earned: 4.8
+    detail: 'grade: documented'
+  - id: auth_clarity
+    status: partial
+    earned: 3.5
+    detail: 'grade: bearer'
+  - id: idempotency
+    status: partial
+    earned: 4.5
+    detail: 'grade: documented'
+  - id: rate_limit_signal
+    status: partial
+    earned: 3.5
+    detail: 'grade: documented'
