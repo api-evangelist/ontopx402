@@ -39,7 +39,7 @@ tags:
 - USDC
 - Agent Payments
 - paid-placement
-- Leaderboard
+- Leaderboards
 tags_raw:
 - x402
 - usdc
@@ -75,7 +75,7 @@ apis:
   humanURL: https://ontopx402.com/
   baseURL: https://ontopx402.com
   tags:
-  - Leaderboard
+  - Leaderboards
   tags_raw:
   - leaderboard
   properties:
