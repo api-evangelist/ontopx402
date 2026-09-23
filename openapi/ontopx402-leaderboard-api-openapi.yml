@@ -103,7 +103,7 @@ servers:
 - url: https://ontopx402.com
   description: OnTopX402 production
 tags:
-- name: leaderboard
+- name: Leaderboard
 paths:
   /api/leaderboard:
     get:
@@ -172,7 +172,7 @@ paths:
               example:
                 error: Too many requests. Slow down.
       tags:
-      - leaderboard
+      - Leaderboard
       x-payment-info:
         price:
           free: {}
@@ -237,13 +237,25 @@ paths:
               example:
                 error: Too many requests. Slow down.
       tags:
-      - leaderboard
+      - Leaderboard
       x-payment-info:
         price:
           free: {}
         protocols: []
 components:
   schemas:
+    EntryLookup:
+      type: object
+      description: A listed link returns its entry plus what it would take to pass the one above it. An unlisted link returns 404 with the price of first place.
+      allOf:
+      - $ref: '#/components/schemas/Entry'
+      properties:
+        listed:
+          type: boolean
+          const: true
+        to_pass_the_one_above_usd:
+          type: string
+          description: A single bid of this size would move this entry above the one ranked directly above it. Absent when it is already number one.
     Leaderboard:
       type: object
       properties:
@@ -336,18 +348,6 @@ components:
           description: A working call, when the problem was a missing or malformed field.
       required:
       - error
-    EntryLookup:
-      type: object
-      description: A listed link returns its entry plus what it would take to pass the one above it. An unlisted link returns 404 with the price of first place.
-      allOf:
-      - $ref: '#/components/schemas/Entry'
-      properties:
-        listed:
-          type: boolean
-          const: true
-        to_pass_the_one_above_usd:
-          type: string
-          description: A single bid of this size would move this entry above the one ranked directly above it. Absent when it is already number one.
 x-payment-accepts:
 - scheme: exact
   network: eip155:8453

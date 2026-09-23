@@ -1,20 +1,24 @@
 {
   "provider": "ontopx402",
   "sources": [
-    "ontopx402-api-openapi.yml"
+    "_original/ontopx402-api-openapi.yml"
   ],
   "outputs": [
     "ontopx402-bidding-api-openapi.yml",
     "ontopx402-leaderboard-api-openapi.yml"
   ],
-  "archived": [
-    "archived openapi/ontopx402-api-openapi.yml"
-  ],
+  "archived": [],
   "errors": [],
   "warnings": [],
   "notes": [
+    "1 archived document(s) dropped as subsets of other archived documents",
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
     "ontopx402-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
-    "apis.yml register: written (+2 apis, 2 total)"
+    "apis.yml register: already-registered"
   ],
-  "skipped": []
+  "skipped": [
+    "_original/ontopx402-openapi.json: archived document superseded by a larger archived document",
+    "ontopx402-bidding-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "ontopx402-leaderboard-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }
