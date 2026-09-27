@@ -256,6 +256,17 @@ components:
         to_pass_the_one_above_usd:
           type: string
           description: A single bid of this size would move this entry above the one ranked directly above it. Absent when it is already number one.
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: What went wrong, in plain words.
+        example:
+          type: string
+          description: A working call, when the problem was a missing or malformed field.
+      required:
+      - error
     Leaderboard:
       type: object
       properties:
@@ -337,17 +348,6 @@ components:
       - first_bid_at
       - updated_at
       - page
-    Error:
-      type: object
-      properties:
-        error:
-          type: string
-          description: What went wrong, in plain words.
-        example:
-          type: string
-          description: A working call, when the problem was a missing or malformed field.
-      required:
-      - error
 x-payment-accepts:
 - scheme: exact
   network: eip155:8453

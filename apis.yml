@@ -37,7 +37,7 @@ specificationVersion: '0.23'
 tags:
 - x402
 - USDC
-- Agent Payments
+- Agentic Payments
 - paid-placement
 - Leaderboards
 tags_raw:
@@ -46,12 +46,12 @@ tags_raw:
 - agent-payments
 - paid-placement
 - leaderboard
+- Agent Payments
 apis:
 - aid: ontopx402:ontopx402-bidding-api
   name: OnTopX402 Bidding API
   description: The bidding API from OnTopX402 — 1 operation(s) for bidding.
   humanURL: https://ontopx402.com/
-  baseURL: https://ontopx402.com
   tags:
   - Bidding
   tags_raw:
@@ -73,7 +73,6 @@ apis:
   name: OnTopX402 Leaderboard API
   description: The leaderboard API from OnTopX402 — 2 operation(s) for leaderboard.
   humanURL: https://ontopx402.com/
-  baseURL: https://ontopx402.com
   tags:
   - Leaderboards
   tags_raw:
