@@ -293,6 +293,62 @@ paths:
       - Bidding
 components:
   schemas:
+    Entry:
+      type: object
+      title: Entry
+      description: One listing on the board.
+      properties:
+        rank:
+          type: integer
+          minimum: 1
+          description: Position on the board. 1 is the top. Computed on read from the total paid, never stored.
+        url:
+          type: string
+          format: uri
+          description: The listed link, normalised.
+        name:
+          type: string
+          description: Display name, derived from the host.
+        description:
+          type: string
+          maxLength: 255
+          description: What the latest bid said this link is.
+        amount_usd:
+          type: string
+          pattern: ^\d+\.\d{2}$
+          description: Lifetime total paid on this link, in US dollars. A string, not a float — money is never a float here.
+        amount_atomic:
+          type: integer
+          description: The same total in atomic USDC units (6 decimals). Use this one for arithmetic.
+        bids:
+          type: integer
+          description: How many settled bids make up the total.
+        favicon:
+          type: string
+          format: uri
+        first_bid_at:
+          type: string
+          format: date-time
+          description: 'When this link first appeared. Breaks ties: on an equal total, whoever arrived first ranks higher.'
+        updated_at:
+          type: string
+          format: date-time
+          description: When the most recent bid settled.
+        page:
+          type: string
+          format: uri
+          description: Human-readable page for this entry, with its full bid history.
+      required:
+      - rank
+      - url
+      - name
+      - description
+      - amount_usd
+      - amount_atomic
+      - bids
+      - first_bid_at
+      - updated_at
+      - page
     BidSuccess:
       type: object
       description: The bid settled and the board has already changed.
@@ -390,62 +446,6 @@ components:
       required:
       - x402Version
       - accepts
-    Entry:
-      type: object
-      title: Entry
-      description: One listing on the board.
-      properties:
-        rank:
-          type: integer
-          minimum: 1
-          description: Position on the board. 1 is the top. Computed on read from the total paid, never stored.
-        url:
-          type: string
-          format: uri
-          description: The listed link, normalised.
-        name:
-          type: string
-          description: Display name, derived from the host.
-        description:
-          type: string
-          maxLength: 255
-          description: What the latest bid said this link is.
-        amount_usd:
-          type: string
-          pattern: ^\d+\.\d{2}$
-          description: Lifetime total paid on this link, in US dollars. A string, not a float — money is never a float here.
-        amount_atomic:
-          type: integer
-          description: The same total in atomic USDC units (6 decimals). Use this one for arithmetic.
-        bids:
-          type: integer
-          description: How many settled bids make up the total.
-        favicon:
-          type: string
-          format: uri
-        first_bid_at:
-          type: string
-          format: date-time
-          description: 'When this link first appeared. Breaks ties: on an equal total, whoever arrived first ranks higher.'
-        updated_at:
-          type: string
-          format: date-time
-          description: When the most recent bid settled.
-        page:
-          type: string
-          format: uri
-          description: Human-readable page for this entry, with its full bid history.
-      required:
-      - rank
-      - url
-      - name
-      - description
-      - amount_usd
-      - amount_atomic
-      - bids
-      - first_bid_at
-      - updated_at
-      - page
     Error:
       type: object
       properties:
