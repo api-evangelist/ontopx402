@@ -19,3 +19,16 @@ plans:
     /api/leaderboard and GET /api/entry (rate limited per address).
   overage: not applicable — every write is individually priced
   limits: minimum bid $1; description max 255 characters; being outbid refunds nothing
+x-canonical:
+  generated: '2026-10-08'
+  vocabulary: all/0-working/economics/plans-canonical.yml
+  models:
+  - metered
+  units: []
+  plans:
+  - name: Pay-per-bid
+    access: other
+    model: metered
+    model_how: derived
+    units: []
+    periods: []
