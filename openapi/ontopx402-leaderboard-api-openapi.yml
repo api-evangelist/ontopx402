@@ -244,6 +244,17 @@ paths:
         protocols: []
 components:
   schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: What went wrong, in plain words.
+        example:
+          type: string
+          description: A working call, when the problem was a missing or malformed field.
+      required:
+      - error
     Leaderboard:
       type: object
       properties:
@@ -269,18 +280,6 @@ components:
       - top_amount_usd
       - to_take_first_usd
       - entries
-    EntryLookup:
-      type: object
-      description: A listed link returns its entry plus what it would take to pass the one above it. An unlisted link returns 404 with the price of first place.
-      allOf:
-      - $ref: '#/components/schemas/Entry'
-      properties:
-        listed:
-          type: boolean
-          const: true
-        to_pass_the_one_above_usd:
-          type: string
-          description: A single bid of this size would move this entry above the one ranked directly above it. Absent when it is already number one.
     Entry:
       type: object
       title: Entry
@@ -337,17 +336,18 @@ components:
       - first_bid_at
       - updated_at
       - page
-    Error:
+    EntryLookup:
       type: object
+      description: A listed link returns its entry plus what it would take to pass the one above it. An unlisted link returns 404 with the price of first place.
+      allOf:
+      - $ref: '#/components/schemas/Entry'
       properties:
-        error:
+        listed:
+          type: boolean
+          const: true
+        to_pass_the_one_above_usd:
           type: string
-          description: What went wrong, in plain words.
-        example:
-          type: string
-          description: A working call, when the problem was a missing or malformed field.
-      required:
-      - error
+          description: A single bid of this size would move this entry above the one ranked directly above it. Absent when it is already number one.
 x-payment-accepts:
 - scheme: exact
   network: eip155:8453
