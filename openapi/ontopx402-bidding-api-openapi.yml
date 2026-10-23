@@ -480,3 +480,9 @@ x-payment-accepts:
   amountDecimals: 6
   amountNote: The amount shown is the $1 minimum. The 402 is priced at whatever amount you send.
   maxTimeoutSeconds: 300
+x-provenance:
+  method: harvested
+  publisher: OnTopX402
+  source: https://ontopx402.com/openapi.json
+  note: split by refine-openapis from the provider's own published document, verified by fetch (openapi/_original/*.fetch.json);
+    stamped by stamp-openapi-provenance.py (roadmap#793)
